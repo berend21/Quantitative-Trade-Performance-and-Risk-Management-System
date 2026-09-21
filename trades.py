@@ -971,7 +971,7 @@ def partial_close_inline(parent_id):
                     'error'
                 )
                 return redirect(url_for('trades'))
-
+            risk_action = 'OPEN' if status == 'OPEN' else 'CLOSE'
 
             accounting = recalculate_parent(conn, parent_id)
             current_risk = accounting['current_risk']
@@ -987,7 +987,7 @@ def partial_close_inline(parent_id):
 
 
 
-        risk_action = 'OPEN' if status == 'OPEN' else 'CLOSE'
+        
         conn.execute('''
             INSERT INTO trades (
                 symbol, open_time, close_time, type,
@@ -1541,8 +1541,20 @@ def recalculate_parent(conn, parent_id):
         (parent_id,)
     ).fetchall()
 
-    if parent['initial_risk'] is None and not children:
+    if not children:
+        # Standalone / normal parent trade with no partial trades.
         current_risk = float(parent['risk'] or 0)
+
+        if parent['status'] == 'CLOSED':
+            return {
+                'current_risk': 0.0,
+                'total_committed_risk': round(current_risk, 8),
+                'closed_risk': round(current_risk, 8),
+                'added_risk': 0.0,
+                'realized_r': float(parent['RR'] or 0),
+                'status': 'CLOSED',
+                'close_time': parent['close_time']
+            }
 
         return {
             'current_risk': round(current_risk, 8),
@@ -1550,8 +1562,8 @@ def recalculate_parent(conn, parent_id):
             'closed_risk': 0.0,
             'added_risk': 0.0,
             'realized_r': float(parent['RR'] or 0),
-            'status': parent['status'],
-            'close_time': parent['close_time']
+            'status': 'OPEN',
+            'close_time': None
         }
 
 
