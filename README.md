@@ -1,4 +1,4 @@
-# STS — Personal Trading Journal & Quantitative Analytics
+# STS — Quantitative Trade Performance and Risk Management System
 
 STS (Smarter Trading Systems) is a self-hosted trading journal and quantitative analytics application built for personal use.
 
