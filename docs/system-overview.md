@@ -144,8 +144,6 @@ flowchart TB
     Services --> Storage
 ```
 
-> **Note:** This is a logical responsibility diagram, not a verified runtime dependency graph. Actual import relationships and database access paths should be documented separately.
-
 ## Core Domain Concepts
 
 ### Trade
@@ -394,29 +392,7 @@ The following capabilities are outside the current architectural scope:
 
 These may be considered in the future, but they are not prerequisites for a reliable personal trading analytics application.
 
-## Related Documentation
 
-| Document | Description |
-|---|---|
-| [Application Architecture](application-architecture.md) | Internal modules, responsibilities, and dependencies |
-| [Domain Model](domain-model.md) | Trading entities and relationships |
-| [Data Flow](data-flow.md) | How information moves through the application |
-| [Architecture Decisions](architecture-decisions.md) | Key technical decisions and their rationale |
-| [Database Design](../engineering/database-design.md) | Schema, indexes, constraints, and migrations |
-| [Analytics Engine](../engineering/analytics-engine.md) | Quantitative methodology and calculations |
-| [Security Model](../engineering/security-model.md) | Authentication and security controls |
-| [Backup and Recovery](../operations/backup-and-recovery.md) | Data protection and restoration |
-
-## Architectural Summary
-
-STS is a private, self-hosted trading journal and quantitative analytics application built around a lightweight Flask and SQLite architecture.
-
-Its design emphasizes:
-
-- Simplicity over unnecessary infrastructure.
-- Risk-normalized performance measurement.
-- Preservation of trade lifecycle information.
-- Quantitative and qualitative analysis.
 - Data integrity and historical reproducibility.
 - Private deployment and operational simplicity.
 
