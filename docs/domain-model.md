@@ -256,74 +256,10 @@ The domain model should enforce or validate the following:
 - Currency conversions must be handled consistently.
 - Missing risk information must not be silently interpreted as zero risk.
 
-## 7. Domain Relationships
 
-The following diagram describes the conceptual relationships between the main trading entities.
+## 7. Supporting Domain Concepts
 
-```mermaid
-erDiagram
-    TRADE ||--|| INITIAL_ENTRY : has
-    TRADE ||--o{ PARTIAL_CLOSE : contains
-    TRADE ||--o{ TRADE_NOTE : has
-    TRADE }o--|| ASSET : references
-    TRADE ||--o| JOURNAL_ENTRY : associated_with
-
-    TRADE {
-        int id PK
-        string symbol
-        string direction
-        decimal entry_price
-        decimal initial_stop
-        decimal initial_quantity
-        decimal initial_risk
-        datetime entry_date
-        datetime exit_date
-        string status
-    }
-
-    INITIAL_ENTRY {
-        int id PK
-        int trade_id FK
-        decimal execution_price
-        decimal quantity
-        datetime executed_at
-    }
-
-    PARTIAL_CLOSE {
-        int id PK
-        int trade_id FK
-        decimal exit_price
-        decimal closed_quantity
-        decimal realized_pnl
-        datetime executed_at
-    }
-
-    TRADE_NOTE {
-        int id PK
-        int trade_id FK
-        text content
-        datetime created_at
-    }
-
-    ASSET {
-        int id PK
-        string symbol
-        string asset_type
-    }
-
-    JOURNAL_ENTRY {
-        int id PK
-        int trade_id FK
-        text content
-        datetime created_at
-    }
-```
-
-> **Note:** This is a conceptual domain relationship diagram. It does not assert that all these entities exist as separate database tables in the current implementation.
-
-## 8. Supporting Domain Concepts
-
-### 8.1 Asset / Symbol
+### 7.1 Asset / Symbol
 
 An asset identifies the financial instrument associated with a trade.
 
@@ -338,7 +274,7 @@ Examples include:
 
 Asset classification enables performance analysis across different instrument categories.
 
-### 8.2 Strategy and Setup
+### 7.2 Strategy and Setup
 
 A strategy describes the broader trading methodology.
 
@@ -358,7 +294,7 @@ Strategy: Trend Following
 
 This distinction allows STS to evaluate which trading approaches produce the strongest historical results.
 
-### 8.3 Journal Entry
+### 7.3 Journal Entry
 
 A journal entry stores qualitative trading information.
 
@@ -373,7 +309,7 @@ Examples include:
 
 Journal information complements quantitative results by providing context that numerical metrics alone cannot capture.
 
-## 9. Domain Invariants
+## 8. Domain Invariants
 
 Domain invariants define conditions that must remain true regardless of which application feature creates or modifies a record.
 
@@ -399,7 +335,7 @@ These invariants should be enforced through a combination of:
 - Domain-level validation.
 - Automated tests.
 
-## 10. Data Integrity and Historical Consistency
+## 9. Data Integrity and Historical Consistency
 
 Trading records represent historical financial activity.
 
@@ -416,72 +352,4 @@ Important requirements include:
 
 Corrections to historical records should be explicit rather than silently changing historical information.
 
-Where appropriate, an audit trail can preserve previous values and modification timestamps.
 
-## 11. Domain Model and Analytics Separation
-
-The domain model describes trading activity.
-
-The analytics subsystem interprets that activity and calculates performance indicators.
-
-These responsibilities should remain conceptually separate.
-
-| Domain Responsibility | Analytics Responsibility |
-|---|---|
-| Store trade information | Calculate performance metrics |
-| Preserve position lifecycle | Calculate realized R |
-| Record partial closes | Calculate weighted trade outcomes |
-| Maintain initial risk | Calculate risk-adjusted statistics |
-| Preserve execution history | Calculate drawdown and equity curves |
-| Store strategy information | Evaluate strategy performance |
-
-Analytics should consume validated domain information rather than independently redefining the underlying trading rules.
-
-## 12. Future Domain Evolution
-
-Potential future improvements include:
-
-- Explicit execution entities.
-- Multiple entries per logical trade.
-- Scale-in and scale-out position management.
-- Strategy and setup classification.
-- MAE and MFE tracking.
-- Trade tagging.
-- Execution fee allocation.
-- Currency conversion support.
-- Immutable execution history.
-- Domain-level audit events.
-- Portfolio-level risk attribution.
-
-These capabilities should be introduced according to actual requirements rather than increasing domain complexity prematurely.
-
-## 13. Domain Design Principles
-
-The STS domain model should follow these principles:
-
-1. A trade represents one logical trading decision and position lifecycle.
-2. Individual executions should remain traceable to their parent trade.
-3. Initial risk must remain distinguishable from realized performance.
-4. Partial closures must preserve position quantity consistency.
-5. Historical execution information should remain reproducible.
-6. Quantitative calculations should use explicitly defined financial rules.
-7. Domain logic should remain independent of presentation and HTTP handling.
-
-## 14. Summary
-
-The STS domain model is centered around the Trade entity and its associated position lifecycle.
-
-Partial closures, initial risk, realized performance, and R-multiples form the foundation of its quantitative trading model.
-
-Maintaining explicit relationships and domain invariants is essential for ensuring that historical performance calculations remain accurate and reproducible.
-
-**The central domain design objective is to preserve the complete lifecycle of a trading position while maintaining financial consistency and reliable risk-normalized performance measurement.**
-
-## Related Documentation
-
-- [System Overview](system-overview.md)
-- [Application Architecture](application-architecture.md)
-- [Data Flow](data-flow.md)
-- [Architecture Decisions](architecture-decisions.md)
-- [Database Design](../engineering/database-design.md)
-- [Analytics Engine](../engineering/analytics-engine.md)
