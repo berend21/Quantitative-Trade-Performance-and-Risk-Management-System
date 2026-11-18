@@ -56,7 +56,7 @@ flowchart TD
     STS -->|"Read / Write"| DB
     STS -->|"Upload / Retrieve"| Files
     STS -->|"HTML Responses"| Browser
-
+```
 ## Technology Stack
 
 | Component | Technology | Responsibility |
