@@ -56,3 +56,23 @@ flowchart TD
     STS -->|"Read / Write"| DB
     STS -->|"Upload / Retrieve"| Files
     STS -->|"HTML Responses"| Browser
+
+## Technology Stack
+
+| Component | Technology | Responsibility |
+|---|---|---|
+| Programming Language | Python | Core application logic |
+| Web Framework | Flask | HTTP request handling and application routing |
+| Application Server | Gunicorn | Production WSGI server |
+| Database | SQLite | Relational data persistence |
+| Data Processing | Pandas | Data manipulation and analytical processing |
+| Statistical Analysis | Python / NumPy / SciPy | Quantitative calculations and statistical evaluation |
+| Frontend | HTML / CSS / JavaScript | User interface and client-side interactions |
+| Templating | Jinja2 | Server-side HTML rendering |
+| Authentication | Flask-Bcrypt | Password hashing |
+| CSRF Protection | Flask-WTF | Cross-site request forgery protection |
+| Rate Limiting | Flask-Limiter | Request rate controls |
+| Image Processing | Pillow | Image manipulation and validation |
+| Spreadsheet Processing | OpenPyXL | Excel file processing |
+| Containerization | Docker | Application packaging and deployment |
+| Orchestration | Docker Compose | Container configuration and lifecycle management |
